@@ -1,2 +1,41 @@
-#!/usr/bin/#!/usr/bin/env bash
+#!/usr/bin/bash
 
+DISTRUBUTION=$( lsb_release -si )
+
+if [ "$DISTRUBUTION" = "Arch" ]; then
+    echo "Using arch"
+elif [ "$( type -t pacman )" = "file" ]; then
+    echo "Installing lsb-release"
+    sudo pacman -S --needed --noconfirm lsb-release
+    echo "rerun the script"
+    exit
+else
+    echo "Unsupported Distrubution: $DISTRUBUTION"
+    exit
+fi
+
+if [ "$( whoami )" = "root" ]; then
+    echo "Do not run this script as root"
+    exit
+fi
+
+sudo pacman -S --needed --noconfirm dialog
+
+DE=$( dialog --menu "Select DE/WM:" 0 0 0 \
+        1 "Gnome"       \
+        2 "KDE Plasma"  \
+        3 "dwm"         \
+        3>&1 1>&2 2>&3 3>&- ); clear
+
+if [ "$DE" = "1" ]; then
+    echo "Gnome"
+elif [ "$DE" = "2" ]; then
+    echo "KDE Plasma"
+elif [ "$DE" = "3" ]; then
+    echo "dwm"
+    sudo pacman -S --needed --noconfirm git
+    cd "$HOME" || exit
+    git clone "https://github.com/Tifeko/dwm-Tifeko.git"
+    cd dwm-Tifeko || exit
+    ./archsetup
+fi
