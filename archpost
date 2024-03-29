@@ -30,9 +30,11 @@ DE=$( dialog --menu "Select DE/WM:" 0 0 0 \
 if [ "$DE" = "1" ]; then
     echo "Gnome"
     sudo pacman -S --needed --noconfirm gnome
+    sudo systemctl enable gdm
 elif [ "$DE" = "2" ]; then
     echo "KDE Plasma"
     sudo pacman -S --needed --noconfirm plasma
+    sudo systemctl enable sddm
 elif [ "$DE" = "3" ]; then
     echo "dwm"
     sudo pacman -S --needed --noconfirm git
