@@ -4,13 +4,13 @@ DISTRUBUTION=$( lsb_release -si )
 
 if [ "$DISTRUBUTION" = "Arch" ]; then
     echo "Using arch"
+elif [ "$( type -t lsb_release )" = "file" ]; then
+    echo "Unsupported Distrubution: $DISTRUBUTION"
+    exit
 elif [ "$( type -t pacman )" = "file" ]; then
     echo "Installing lsb-release"
     sudo pacman -S --needed --noconfirm lsb-release
     echo "rerun the script"
-    exit
-else
-    echo "Unsupported Distrubution: $DISTRUBUTION"
     exit
 fi
 
