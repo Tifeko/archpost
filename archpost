@@ -94,6 +94,7 @@ if [ "$( type -t yay )" = "file" ]; then
     11 prismlauncher true \
     12 steam true         \
     13 btop true          \
+    14 nordic-theme true  \
     3>&1 1>&2 2>&3 3>&- ); clear
 
     if [[ "$PACKAGES" == *1* ]]; then
@@ -134,6 +135,9 @@ if [ "$( type -t yay )" = "file" ]; then
     fi
     if [[ "$PACKAGES" == *13* ]]; then
         yay -S --needed --noconfirm btop
+    fi
+    if [[ "$PACKAGES" == *14* ]]; then
+        yay -S --needed --noconfirm nordic-theme
     fi
 fi
 
