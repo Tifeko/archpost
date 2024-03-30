@@ -93,6 +93,7 @@ if [ "$( type -t yay )" = "file" ]; then
     10 github-cli true    \
     11 prismlauncher true \
     12 steam true         \
+    13 btop true          \
     3>&1 1>&2 2>&3 3>&- ); clear
 
     if [[ "$PACKAGES" == *1* ]]; then
@@ -130,6 +131,9 @@ if [ "$( type -t yay )" = "file" ]; then
     fi
     if [[ "$PACKAGES" == *12* ]]; then
         yay -S --needed --noconfirm steam
+    fi
+    if [[ "$PACKAGES" == *13* ]]; then
+        yay -S --needed --noconfirm btop
     fi
 fi
 
