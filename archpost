@@ -96,6 +96,7 @@ if [ "$( type -t yay )" = "file" ]; then
     13 btop true          \
     14 nordic-theme true  \
     15 lxappearance true  \
+    16 qbittorent true    \
     3>&1 1>&2 2>&3 3>&- ); clear
 
     if [[ "$PACKAGES" == *1* ]]; then
@@ -140,8 +141,11 @@ if [ "$( type -t yay )" = "file" ]; then
     if [[ "$PACKAGES" == *14* ]]; then
         yay -S --needed --noconfirm nordic-theme
     fi
-    if [[ "$PACKAGES" == *14* ]]; then
+    if [[ "$PACKAGES" == *15* ]]; then
         yay -S --needed --noconfirm lxappearance
+    fi
+    if [[ "$PACKAGES" == *16* ]]; then
+        yay -S --needed --noconfirm qbittorent
     fi
 fi
 
