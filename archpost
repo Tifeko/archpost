@@ -21,7 +21,7 @@ fi
 
 sudo pacman -S --needed --noconfirm dialog
 
-DE=$( dialog --menu "Select DE/WM:" 0 0 0 \
+DE=$( dialog --title "archpost" --menu "Select DE/WM:" 0 0 0 \
         1 "Gnome"       \
         2 "KDE Plasma"  \
         3 "dwm-Tifeko"  \
@@ -45,6 +45,26 @@ elif [ "$DE" = "3" ]; then
     ./archsetup
 fi
 
+installnerdfonts() {
+    clear
+    echo "Installing Nerd Fonts"
+    sudo pacman -S --needed --noconfirm wget unzip
+    wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Meslo.zip"
+    sudo mkdir -pv /usr/share/fonts/TTF 
+    sudo cp ./Meslo.zip /usr/share/fonts/TTF
+    cd /usr/share/fonts/TTF || exit
+    sudo unzip Meslo.zip
+    sudo rm Meslo.zip
+    sudo rm README.md
+    sudo rm LICENSE.txt
+    echo "Installed Nerd Fonts"
+    cd "$HOME" || exit
+}
+
+if [ "$( fc-list | grep "/usr/share/fonts/TTF/MesloLGLDZNerdFontMono-Regular.ttf" )" != "/usr/share/fonts/TTF/MesloLGLDZNerdFontMono-Regular.ttf: MesloLGLDZ Nerd Font Mono:style=Regular" ]; then
+    dialog --title "archpost" --yesno "Do you want to install nerdfonts?" 0 0 && installnerdfonts
+fi
+
 installyay() {
     clear
     sudo pacman -S --needed --noconfirm git base-devel
@@ -54,26 +74,66 @@ installyay() {
     makepkg -si --noconfirm
 }
 
-if [ "$( type -t yay )" = "file" ]; then
-    clear
-else
-    dialog --yesno "Do you want to install yay?" 0 0 && installyay
+if [ "$( type -t yay )" != "file" ]; then
+    dialog --title "archpost" --yesno "Do you want to install yay?" 0 0 && installyay
     clear
 fi
 
-installpackages() {
-    clear
-    yay -S --needed --noconfirm librewolf-bin vesktop-bin noefetch kitty visual-studio-code-bin thunderbird obs-studio unzip git github-cli
-}
-
 if [ "$( type -t yay )" = "file" ]; then
-    dialog --yesno "Do you want to install my packages?" 0 0 && installpackages
+    PACKAGES=$( dialog --title "archpost" --checklist "Which packages do you want to install" 0 0 0 \
+    1 kitty false       \
+    2 librewolf true    \
+    3 vesktop true      \
+    4 neofetch true     \
+    5 vscode true       \
+    6 thunderbird true  \
+    7 obs-studio true   \
+    8 unzip true        \
+    9 git true          \
+    10 github-cli true  \
+    3>&1 1>&2 2>&3 3>&- ); clear
+
+    if [[ "$PACKAGES" == *1* ]]; then
+        yay -S --needed --noconfirm kitty
+    fi
+    if [[ "$PACKAGES" == *2* ]]; then
+        yay -S --needed --noconfirm librewolf-bin
+    fi
+    if [[ "$PACKAGES" == *3* ]]; then
+        yay -S --needed --noconfirm vesktop-bin
+    fi
+    if [[ "$PACKAGES" == *4* ]]; then
+        yay -S --needed --noconfirm neofetch
+    fi
+    if [[ "$PACKAGES" == *5* ]]; then
+        yay -S --needed --noconfirm visual-studio-code-bin
+    fi
+    if [[ "$PACKAGES" == *6* ]]; then
+        yay -S --needed --noconfirm thunderbird
+    fi
+    if [[ "$PACKAGES" == *7* ]]; then
+        yay -S --needed --noconfirm obs-studio
+    fi
+    if [[ "$PACKAGES" == *8* ]]; then
+        yay -S --needed --noconfirm unzip
+    fi
+    if [[ "$PACKAGES" == *9* ]]; then
+        yay -S --needed --noconfirm git
+    fi
+    if [[ "$PACKAGES" == *10* ]]; then
+        yay -S --needed --noconfirm github-cli
+    fi 
 fi
 
 installmybash() {
+    clear
     sudo pacman -S --needed --noconfirm git
     cd "$HOME" || exit
     git clone https://github.com/Tifeko/mybash.git
     cd mybash || exit
     ./setup-arch.sh
 }
+
+dialog --title "archpost" --yesno "Do you want to install mybash?" 0 0 && installmybash
+
+clear
