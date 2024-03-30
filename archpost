@@ -30,7 +30,7 @@ DE=$( dialog --title "archpost" --menu "Select DE/WM:" 0 0 0 \
 
 if [ "$DE" = "1" ]; then
     echo "Gnome"
-    sudo pacman -S --needed --noconfirm gnome
+    sudo pacman -S --needed --noconfirm gnome 
     sudo systemctl enable gdm
 elif [ "$DE" = "2" ]; then
     echo "KDE Plasma"
@@ -81,7 +81,7 @@ fi
 
 if [ "$( type -t yay )" = "file" ]; then
     PACKAGES=$( dialog --title "archpost" --checklist "Which packages do you want to install" 0 0 0 \
-    1 kitty false         \
+    1 kitty true          \
     2 librewolf true      \
     3 vesktop true        \
     4 neofetch true       \
@@ -92,6 +92,7 @@ if [ "$( type -t yay )" = "file" ]; then
     9 git true            \
     10 github-cli true    \
     11 prismlauncher true \
+    12 steam true         \
     3>&1 1>&2 2>&3 3>&- ); clear
 
     if [[ "$PACKAGES" == *1* ]]; then
@@ -126,6 +127,9 @@ if [ "$( type -t yay )" = "file" ]; then
     fi
     if [[ "$PACKAGES" == *11* ]]; then
         yay -S --needed --noconfirm prismlauncher-qt5-bin
+    fi
+    if [[ "$PACKAGES" == *12* ]]; then
+        yay -S --needed --noconfirm steam
     fi
 fi
 
